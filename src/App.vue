@@ -38,7 +38,7 @@ export default {
       this.likes++
     },
     async testRequest() {
-      const response = await axios.get('http://127.0.0.1:8000/api/test/')
+      const response = await axios.get('https://kraft.toskins.ru/test/')
 
       console.log(response)
     }
