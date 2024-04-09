@@ -48,6 +48,9 @@
 <!--      <button-tos @click="testRequest">Печать</button-tos>-->
     </div>
           <div style="margin-right: 0.5rem; padding: 0.5rem; height: 100%">
+            <input placeholder="login" type="text" v-model="login">
+            <input placeholder="password" type="password" v-model="password">
+            <button @click="auth">Войти</button>
     <input style="height: 100%" @keyup="searchToPage">
             </div>
     <div style="margin-right: 0.5rem">not</div>
@@ -56,6 +59,7 @@
   </header>
       <div id="data-page">
       <CustomerList :data="customers"/>
+<!--        <router-view/>-->
         </div>
     </div>
   </div>
@@ -72,7 +76,9 @@ export default {
   data() {
     return {
       likes: 0,
-      customers: []
+      customers: [],
+      login: '',
+      password: ''
     }
   },
   methods: {
@@ -80,9 +86,20 @@ export default {
       this.likes++
     },
     async testRequest() {
-      const response = await axios.get('https://kraft.toskins.ru/crm/api/v1/get-customers/')
+      try {
+      const response = await axios.get('https://kraft.toskins.ru/api/v1/customers/', {
+          // const response = await axios.get('http://127.0.0.1:8000/api/v1/customers/', {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`,
+            }
+          })
+        console.log(response.data)
 
-      this.customers = response.data.customers
+
+      this.customers = response.data
+        } catch (e) {
+        console.log(e)
+      }
     },
     searchToPage() {
       const searchList = document.querySelectorAll('[data-search]')
@@ -93,8 +110,14 @@ export default {
         searchEl.style.display = 'flex'
       }
     }
+    },
+    async auth() {
+      const response = await axios.post('https://kraft.toskins.ru/api/auth/jwt/create/',
+      //     const response = await axios.post('http://127.0.0.1:8000/api/auth/jwt/create/',
+          {username: this.login, password: this.password})
+      console.log(response)
+      localStorage.access_token = response.data.access
     }
-
 
   },
   mounted() {

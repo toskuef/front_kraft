@@ -9,7 +9,7 @@
       <div class="col w-20" style="margin: 0.5rem">Телефон</div>
     </div>
     <div class="hidden-scr" style=" overflow-y: scroll; ">
-      <div class="row customer-item" v-for="customer of data"
+      <div @click="$router.push(`/customers/${customer.id}/`)" class="row customer-item" v-for="customer of data"
            data-search>
         <div class="col w-40" style="margin: 0.5rem">{{ customer.full_name }}
         </div>
