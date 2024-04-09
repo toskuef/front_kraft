@@ -1,3 +1,7 @@
 :root {
   --bg-gray-100: #f8f9fa;
+
+  --h-header: 50px;
+
+  --h-content: calc(100vh - var(--h-header))
 }

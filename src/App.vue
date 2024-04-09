@@ -26,7 +26,7 @@
 <!--    <router-view />-->
 <!--  </main>-->
 <!--</div>-->
-  <div style="position: absolute; top: 0; left: 0; height: 100vh; width: 100px"></div>
+<!--  <div style="position: absolute; top: 0; left: 0; height: 100vh; width: 100px"></div>-->
   <div style="display: flex" class="" id="">
     <div class="n" >
       <div class="nav-list" style="height: 100%; padding-top: 20px" id="nav">
@@ -42,30 +42,21 @@
     </div>
     <div  style="width: 100%" id="content">
         <header style="display: flex; height: 50px; align-items: center; position: sticky; top: 0; background-color: antiquewhite">
-    <div style="justify-content: center;">title</div>
+    <div style="justify-content: center;">Клиенты</div>
     <div style="margin-left: auto; margin-right: 0.5rem">
-      <button-tos style="margin-right: 5px">Создать</button-tos>
-      <button-tos @click="testRequest">Печать</button-tos>
+<!--      <button-tos style="margin-right: 5px">Создать</button-tos>-->
+<!--      <button-tos @click="testRequest">Печать</button-tos>-->
     </div>
-    <input style="margin-right: 0.5rem">
+          <div style="margin-right: 0.5rem; padding: 0.5rem; height: 100%">
+    <input style="height: 100%" @keyup="searchToPage">
+            </div>
     <div style="margin-right: 0.5rem">not</div>
     <div style="margin-right: 0.5rem">set</div>
     <div style="">lk</div>
   </header>
-      <div class="table" style="margin: 0.5rem; background-color: white; border-radius: 8px; font-size: 16px;box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, 0.12) !important;">
-        <div style="display: flex; padding-right: 0.5rem; padding-left: 0.5rem; border-bottom-color: #343951; border-bottom-style: solid" class="row">
-          <div class="col" style="width: 40%; margin: 0.5rem">Имя</div>
-          <div class="col" style="width: 40%; margin: 0.5rem">Адрес</div>
-          <div class="col" style="width: 20%; margin: 0.5rem">Телефон</div>
+      <div id="data-page">
+      <CustomerList :data="customers"/>
         </div>
-        <div class="hidden-scr" style="height: 500px; overflow-y: scroll; ">
-        <div style="display: flex; padding-right: 0.5rem; padding-left: 0.5rem; border-bottom-color: #343951; border-bottom-style: solid" class="row customer-item" v-for="customer of customers" @mouseenter="hover" @mouseleave="unhover">
-          <div class="col" style="width: 40%; margin: 0.5rem">{{customer.full_name}}</div>
-          <div class="col" style="width: 40%; margin: 0.5rem">{{customer.address}}</div>
-          <div class="col" style="width: 20%; margin: 0.5rem">{{customer.phone}}</div>
-        </div>
-          </div>
-      </div>
     </div>
   </div>
 </template>
@@ -74,9 +65,10 @@
 import ButtonTos from "@/components/button-tos.vue";
 import axios from "axios";
 import './variables.scss'
+import CustomerList from "@/components/CustomerList.vue";
 
 export default {
-  components: {ButtonTos},
+  components: {CustomerList, ButtonTos},
   data() {
     return {
       likes: 0,
@@ -92,13 +84,17 @@ export default {
 
       this.customers = response.data.customers
     },
-    hover() {
-      event.target.style.backgroundColor = '#dee2e6'
+    searchToPage() {
+      const searchList = document.querySelectorAll('[data-search]')
+    for (const searchEl of searchList) {
+      if (!searchEl.innerText.toLowerCase().includes(event.target.value.toLowerCase())) {
+        searchEl.style.display = 'none'
+      } else {
+        searchEl.style.display = 'flex'
+      }
+    }
+    }
 
-    },
-    unhover() {
-      event.target.style.backgroundColor = ''
-    },
 
   },
   mounted() {
@@ -112,12 +108,16 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-.row {
-  font-size: 16px;
-  font-family: "Open Sans";
+.d-none {
+  display: none;
 }
+
 #content {
   background-color: var(--bg-gray-100)
+}
+#data-page {
+  height: var(--h-content);
+  padding: 0.5rem;
 }
 .n {
   width: 0;
